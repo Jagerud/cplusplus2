@@ -32,13 +32,12 @@ int startingFunds() {
 	}
 	return totalMoney;
 }
-int main()
-{
+void game() {
 	int gameEnder = 0, roundMoney = 0, totalMoney = 0;
 	char symbols[3][3];
 	char x, y;
 	totalMoney == startingFunds();	//initial money with error handling
-	
+
 	while (gameEnder == 0) {
 		cout << "Yo ";
 
@@ -54,12 +53,11 @@ int main()
 
 
 		totalMoney = updateMoney(totalMoney, roundMoney);	//updated total
-
-		
-
-
 	}
-
+}
+int main()
+{
+	game();
     return 0;
 }
 
