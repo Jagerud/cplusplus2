@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "iostream"
+#include "Windows.h"
 using namespace std;
 
 //updates total money
@@ -32,32 +33,35 @@ int startingFunds() {
 	}
 	return totalMoney;
 }
-void game() {
-	int gameEnder = 0, roundMoney = 0, totalMoney = 0;
+void game(int money) {
+	int gameEnder = 0, roundMoney = 0, totalMoney = money;
 	char symbols[3][3];
-	char x, y;
-	totalMoney == startingFunds();	//initial money with error handling
-
+	
 	while (gameEnder == 0) {
-		cout << "Yo ";
-
-
-
-		for (int i = 0; i < 3; i++)
+		totalMoney = updateMoney(totalMoney, roundMoney);	//updated total
+		for (int i = 0; i < 3; i++)	//loops over rows
+		{
+			for (int j = 0; j < 3; j++)	//loops over columns
+			{
+				symbols[i][j] = (char)((rand() % 3) + 65);	//randoms a number between 0-2 and then adds 65 to match numbers of A to C
+			}
+		}
+		for (int i = 0; i < 3; i++)	//writes matrix
 		{
 			for (int j = 0; j < 3; j++)
 			{
-
+				cout << symbols[i][j] << " "; 
 			}
+			cout << "\n";
 		}
 
-
-		totalMoney = updateMoney(totalMoney, roundMoney);	//updated total
+		
 	}
 }
 int main()
 {
-	game();
+	int totalMoney = startingFunds();	//initial money with error handling
+	game(totalMoney);	//game engine with inputed money to play with
     return 0;
 }
 
