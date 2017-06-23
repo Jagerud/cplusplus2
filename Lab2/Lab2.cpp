@@ -4,7 +4,7 @@
 using namespace std;
 
 //updates total money
-int updateMoney(int totalMoney, int roundMoney )
+int updateMoney(int totalMoney, int roundMoney)
 {
 	totalMoney = totalMoney - roundMoney;
 	return totalMoney;
@@ -23,7 +23,7 @@ int startingFunds() {
 			totalMoney = totalMoney + tempMoney;
 			cout << "Total money is now: " << totalMoney << " Press 0 to stop insert or continue \n";
 		}
-		else if(totalMoney + tempMoney == 1000){ //if total is 1000, game starts
+		else if (totalMoney + tempMoney == 1000) { //if total is 1000, game starts
 			totalMoney = totalMoney + tempMoney;
 			cout << "Total money is now: " << totalMoney << " \n";
 		}
@@ -34,10 +34,10 @@ int startingFunds() {
 	return totalMoney;
 }
 void game(int money) {
-	int gameEnder = 0, roundMoney = 0, totalMoney = money;
+	int gameEnder = 0, roundMoney = 0, totalMoney = money, rows = 0;
 	char symbols[3][3];
-	
-	while (gameEnder == 0) {
+
+	while (gameEnder != 0) {
 		totalMoney = updateMoney(totalMoney, roundMoney);	//updated total
 		for (int i = 0; i < 3; i++)	//loops over rows
 		{
@@ -50,20 +50,69 @@ void game(int money) {
 		{
 			for (int j = 0; j < 3; j++)
 			{
-				cout << symbols[i][j] << " "; 
+				cout << symbols[i][j] << " ";
+
 			}
 			cout << "\n";
 		}
-
-		
+		if (symbols[0][0] == symbols[0][1] && symbols[0][0] == symbols[0][2]) {
+			//first horisontal
+			rows++;
+		}
+		if (symbols[1][0] == symbols[1][1] && symbols[1][0] == symbols[1][2]) {
+			//2nd horizontal 
+			rows++;
+		}
+		if (symbols[2][0] == symbols[2][1] && symbols[2][0] == symbols[2][2]) {
+			//3d horizontal 
+			rows++;
+		}
+		if (symbols[0][0] == symbols[1][0] && symbols[0][0] == symbols[2][0]) {
+			//first vertical 
+			rows++;
+		}
+		if (symbols[0][1] == symbols[1][1] && symbols[0][1] == symbols[1][1]) {
+			//2nd vertical 
+			rows++;
+		}
+		if (symbols[0][2] == symbols[1][2] && symbols[0][2] == symbols[2][2]) {
+			//3e vertical 
+			rows++;
+		}
+		if (symbols[0][0] == symbols[1][1] && symbols[0][0] == symbols[2][2]) {
+			//left diagonal 
+			rows++;
+		}
+		if (symbols[0][2] == symbols[1][1] && symbols[0][2] == symbols[2][0]) {
+			//right diagonal 
+			rows++;
+		}
+		if (rows < 5 & & rows != 0) {
+			roundMoney = roundMoney * (2 ^ rows);
+			cout << "You won: " << roundMoney << endl;		//realized "endl" exists
+		}
+		else if (rows >= 5) {
+			roundMoney = roundMoney * 128;
+			cout << "Congratulation!!! You won the jackpot! You won: " << roundMoney << endl;
+		}
+		else {
+			roundMoney = 0;
+			cout << "No matches, better luck next time" << endl;
+		}
+		totalMoney = totalMoney + roundMoney;
+		if (totalMoney > 10) {
+			cout << "Press any key or 0 to end" << endl;
+			cin >> gameEnder;
+		}
+		else {
+			gameEnder == 0;
+			cout << "Game over";
+		}
 	}
 }
 int main()
 {
 	int totalMoney = startingFunds();	//initial money with error handling
 	game(totalMoney);	//game engine with inputed money to play with
-    return 0;
+	return 0;
 }
-
-
-
