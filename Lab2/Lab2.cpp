@@ -58,7 +58,6 @@ void game(int money) {
 	while (gameEnder != 0) {
 		roundMoney = roundFunds(totalMoney);
 		totalMoney = drawFromTotal(totalMoney, roundMoney);	//updated total
-		cout << "roundMoney before " << roundMoney << endl;
 		for (int i = 0; i < 3; i++)	//loops over rows
 		{
 			for (int j = 0; j < 3; j++)	//loops over columns
@@ -106,9 +105,9 @@ void game(int money) {
 			//right diagonal 
 			rows++;
 		}
-		cout << rows << endl;
-		if (rows < 5 ) {
-			if(rows == 0) {
+		cout << rows << " row(s)" << endl;
+		if (rows < 5) {
+			if (rows == 0) {
 				roundMoney = 0;
 				cout << "No matches, better luck next time" << endl;
 			}
