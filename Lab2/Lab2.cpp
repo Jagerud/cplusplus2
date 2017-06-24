@@ -1,12 +1,19 @@
 #include "stdafx.h"
 #include "iostream"
 #include "Windows.h"
+#include "cmath"
+#include "time.h"
 using namespace std;
 
 //updates total money
-int updateMoney(int totalMoney, int roundMoney)
+int drawFromTotal(int totalMoney, int roundMoney)
 {
 	totalMoney = totalMoney - roundMoney;
+	return totalMoney;
+}
+int addToTotal(int totalMoney, int roundMoney)
+{
+	totalMoney = totalMoney + roundMoney;
 	return totalMoney;
 }
 //Sets the total money for the user to play with
@@ -33,12 +40,25 @@ int startingFunds() {
 	}
 	return totalMoney;
 }
+int roundFunds(int totalMoney) {
+	int roundMoney = 0;
+	cout << "Insert 1-50 to play, 0 to exit \n";
+	cin >> roundMoney;	//input of amount chosen
+	while ((roundMoney < 1) || roundMoney > 50 || roundMoney > totalMoney) {	//Loops as long as money value is wrong or to big
+		cout << "Wrong input, please try again \n";
+		cin >> roundMoney;	//input of amount chosen
+	}
+	return roundMoney;
+}
 void game(int money) {
-	int gameEnder = 0, roundMoney = 0, totalMoney = money, rows = 0;
+	int gameEnder = 1, roundMoney = 0, totalMoney = money, rows = 0;
 	char symbols[3][3];
+	srand(time(NULL));		//Sets the random
 
 	while (gameEnder != 0) {
-		totalMoney = updateMoney(totalMoney, roundMoney);	//updated total
+		roundMoney = roundFunds(totalMoney);
+		totalMoney = drawFromTotal(totalMoney, roundMoney);	//updated total
+		cout << "roundMoney before " << roundMoney << endl;
 		for (int i = 0; i < 3; i++)	//loops over rows
 		{
 			for (int j = 0; j < 3; j++)	//loops over columns
@@ -46,12 +66,11 @@ void game(int money) {
 				symbols[i][j] = (char)((rand() % 3) + 65);	//randoms a number between 0-2 and then adds 65 to match numbers of A to C
 			}
 		}
-		for (int i = 0; i < 3; i++)	//writes matrix
+		for (int x = 0; x < 3; x++)	//writes matrix
 		{
-			for (int j = 0; j < 3; j++)
+			for (int y = 0; y < 3; y++)
 			{
-				cout << symbols[i][j] << " ";
-
+				cout << symbols[x][y] << " ";
 			}
 			cout << "\n";
 		}
@@ -71,7 +90,7 @@ void game(int money) {
 			//first vertical 
 			rows++;
 		}
-		if (symbols[0][1] == symbols[1][1] && symbols[0][1] == symbols[1][1]) {
+		if (symbols[0][1] == symbols[1][1] && symbols[0][1] == symbols[2][1]) {
 			//2nd vertical 
 			rows++;
 		}
@@ -87,26 +106,35 @@ void game(int money) {
 			//right diagonal 
 			rows++;
 		}
-		if (rows < 5 & & rows != 0) {
-			roundMoney = roundMoney * (2 ^ rows);
-			cout << "You won: " << roundMoney << endl;		//realized "endl" exists
+		cout << rows << endl;
+		if (rows < 5 ) {
+			if(rows == 0) {
+				roundMoney = 0;
+				cout << "No matches, better luck next time" << endl;
+			}
+			else {
+				roundMoney = roundMoney * pow(2, rows);	//learned that ^ does not work as well
+				cout << "You won: " << roundMoney << endl;		//realized "endl" exists
+			}
 		}
-		else if (rows >= 5) {
+		else if (rows > 5) {
 			roundMoney = roundMoney * 128;
 			cout << "Congratulation!!! You won the jackpot! You won: " << roundMoney << endl;
 		}
-		else {
-			roundMoney = 0;
-			cout << "No matches, better luck next time" << endl;
+		else if (rows == 5) {
+			roundMoney = roundMoney * 16;
+			cout << "You won: " << roundMoney << endl;
 		}
-		totalMoney = totalMoney + roundMoney;
-		if (totalMoney > 10) {
-			cout << "Press any key or 0 to end" << endl;
+		totalMoney = addToTotal(totalMoney, roundMoney);
+		rows = 0;
+		if (totalMoney > 0) {
+			cout << "Total is now: " << totalMoney << "\nPress any key or 0 to end" << endl;
 			cin >> gameEnder;
 		}
 		else {
-			gameEnder == 0;
+			gameEnder = 0;
 			cout << "Game over";
+			Sleep(3000);
 		}
 	}
 }
